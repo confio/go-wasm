@@ -50,9 +50,13 @@ func AsString(instance wasm.Instance, res wasm.Value) (interface{}, error) {
 
 // Run will execute the named function on the wasm bytes with the passed arguments.
 // Returns the result or an error
-func Run(code []byte, call string, args []interface{}, parse ResultParser) (interface{}, error) {
+func Run(code []byte, imports *wasm.Imports, call string, args []interface{}, parse ResultParser) (interface{}, error) {
+	if imports == nil {
+		imports = wasm.NewImports()
+	}
+
 	// Instantiates the WebAssembly module.
-	instance, err := wasm.NewInstance(code)
+	instance, err := wasm.NewInstanceWithImports(code, imports)
 	if err != nil {
 		return nil, errors.Wrap(err, "init wasmer")
 	}
