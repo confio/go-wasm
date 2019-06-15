@@ -14,7 +14,7 @@ func TestSimple(t *testing.T) {
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
-	if res != 119 {
+	if res.ToI32() != 119 {
 		t.Fatalf("Unexpected result: %d", res)
 	}
 }
@@ -29,7 +29,23 @@ func TestFib(t *testing.T) {
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
-	if res != 21 { // fib(8)
+	if res.ToI32() != 21 { // fib(8)
 		t.Fatalf("Unexpected result: %d", res)
 	}
+}
+
+func TestGreet(t *testing.T) {
+	simple, err := Read("examples/greet/greet.wasm")
+	if err != nil {
+		t.Fatalf("%+v", err)
+	}
+
+	res, err := Run(simple, "greet", []interface{}{"world"})
+	if err != nil {
+		t.Fatalf("%+v", err)
+	}
+	if res.String() != "Hello, world!" {
+		t.Fatalf("Unexpected result: %d", res)
+	}
+
 }

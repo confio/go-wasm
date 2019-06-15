@@ -14,25 +14,25 @@ func Read(filename string) ([]byte, error) {
 
 // Run will execute the named function on the wasm bytes with the passed arguments.
 // Returns the result or an error
-func Run(code []byte, call string, args []interface{}) (int32, error) {
+func Run(code []byte, call string, args []interface{}) (*wasm.Value, error) {
 
 	// Instantiates the WebAssembly module.
 	instance, err := wasm.NewInstance(code)
 	if err != nil {
-		return 0, errors.Wrap(err, "init wasmer")
+		return nil, errors.Wrap(err, "init wasmer")
 	}
 	defer instance.Close()
 
 	f, ok := instance.Exports[call]
 	if !ok {
-		return 0, errors.Errorf("Function %s not in Exports", call)
+		return nil, errors.Errorf("Function %s not in Exports", call)
 	}
 
 	ret, err := f(args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "Execution failure")
+		return nil, errors.Wrap(err, "Execution failure")
 	}
 	fmt.Printf("%v: %v\n", ret.GetType(), ret)
 
-	return ret.ToI32(), nil
+	return &ret, nil
 }
