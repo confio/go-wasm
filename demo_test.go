@@ -70,7 +70,12 @@ func TestImportFunc(t *testing.T) {
 		t.Fatalf("%+v", err)
 	}
 
-	res, err := Run(simple, nil, "add1", []interface{}{int32(7), int32(9)}, AsInt32)
+	imports, err := importsWithSum()
+	if err != nil {
+		t.Fatalf("%+v", err)
+	}
+
+	res, err := Run(simple, imports, "add1", []interface{}{int32(7), int32(9)}, AsInt32)
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
