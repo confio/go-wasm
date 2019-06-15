@@ -28,7 +28,6 @@ func AsString(instance wasm.Instance, res wasm.Value) (interface{}, error) {
 	memory := instance.Memory.Data()[outputPointer:]
 	nth := 0
 	var output strings.Builder
-
 	for {
 		if memory[nth] == 0 {
 			break
@@ -100,10 +99,7 @@ func prepareString(instance wasm.Instance, arg string) int32 {
 
 	// Write the subject into the memory.
 	memory := instance.Memory.Data()[inputPointer:]
-
-	for nth := 0; nth < l; nth++ {
-		memory[nth] = arg[nth]
-	}
+	copy(memory, arg)
 
 	// C-string terminates by NULL.
 	memory[l] = 0

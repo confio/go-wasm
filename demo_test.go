@@ -40,12 +40,11 @@ func TestGreet(t *testing.T) {
 		t.Fatalf("%+v", err)
 	}
 
-	res, err := Run(simple, "greet", []interface{}{"world"}, AsString)
+	res, err := Run(simple, "greet", []interface{}{`{"number": 2}`}, AsString)
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
-	if res.(string) != "Hello, world!" {
+	if res.(string) != "Hello, Hello, !" {
 		t.Fatalf("Unexpected result: %d", res)
 	}
-
 }
