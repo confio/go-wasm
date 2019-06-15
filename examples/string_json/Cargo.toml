@@ -1,0 +1,14 @@
+[package]
+name = "string_json"
+version = "0.1.0"
+authors = ["losfair <zhy20000919@hotmail.com>"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+lto = true
+
+[dependencies]
+serde-json-core = "0.0.1"
+serde = { version = "1.0", default-features = false, features = ["derive"] }
