@@ -26,7 +26,7 @@ pub extern "C" fn deallocate(pointer: *mut c_void, capacity: usize) {
 #[no_mangle]
 pub extern "C" fn add1(x: i32, y: i32) -> *mut c_char {
     let msg = "fool ";
-    let mut response = b"                                                                                                                                                               ".to_vec();
+    let mut response = vec![0; 2048];
 
     unsafe { 
         let cnt = sum(x, y) + 1;
