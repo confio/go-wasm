@@ -70,7 +70,7 @@ func TestImportFunc(t *testing.T) {
 		t.Fatalf("%+v", err)
 	}
 
-	imports, err := importsWithSum()
+	imports, err := importsWithRepeatAndSum()
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
