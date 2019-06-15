@@ -4,7 +4,7 @@ package wasm
 //
 // extern int32_t sum(void *context, int32_t x, int32_t y);
 //
-// extern void repeat(void *context, int32_t pointer, int32_t length, int32_t count);
+// extern int32_t repeat(void *context, int32_t pointer, int32_t length, int32_t count);
 import "C"
 
 import (
@@ -25,13 +25,15 @@ func importsWithSum() (*wasm.Imports, error) {
 }
 
 //export repeat
-func repeat(context unsafe.Pointer, pointer int32, length int32, count int32) {
+func repeat(context unsafe.Pointer, pointer int32, length int32, count int32) int32 {
 	var instanceContext = wasm.IntoInstanceContext(context)
 	var memory = instanceContext.Memory().Data()
 	text := string(memory[pointer : pointer+length])
 
 	res := strings.Repeat(text, int(count))
 	fmt.Println(res)
+
+	return int32(len(res))
 }
 
 func importsWithRepeatAndSum() (*wasm.Imports, error) {

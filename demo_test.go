@@ -79,7 +79,7 @@ func TestImportFunc(t *testing.T) {
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
-	if res.(int32) != 17 {
+	if res.(int32) != 17*5 {
 		t.Fatalf("Unexpected result: %d", res)
 	}
 }
