@@ -36,7 +36,7 @@ pub extern "C" fn greet(subject: *mut c_char) -> *mut c_char {
     let my_dumb_struct: MyDumbStruct = from_slice(&subject).unwrap();
     let mut output = b"Hello, ".to_vec();
 
-    for _ in 0..my_dumb_struct.number {
+    for _ in 1..my_dumb_struct.number {
         output.extend(&output.clone());
     }
 
