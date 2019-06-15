@@ -48,3 +48,18 @@ func TestGreet(t *testing.T) {
 		t.Fatalf("Unexpected result: %d", res)
 	}
 }
+
+func TestStringJSON(t *testing.T) {
+	simple, err := Read("examples/string_json/build/string_json.wasm")
+	if err != nil {
+		t.Fatalf("%+v", err)
+	}
+
+	res, err := Run(simple, "greet", []interface{}{`{"number": 3, "message": "Gaia "}`}, AsString)
+	if err != nil {
+		t.Fatalf("%+v", err)
+	}
+	if res.(string) != "Hello, Gaia Gaia Gaia !" {
+		t.Fatalf("Unexpected result: %d", res)
+	}
+}
