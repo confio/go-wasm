@@ -10,15 +10,12 @@ import (
 var defaultConfig = exec.VMConfig{
 	DefaultMemoryPages:   128,
 	DefaultTableSize:     65536,
-	DisableFloatingPoint: false,
+	DisableFloatingPoint: true,
 }
-
-// TODO: use later
-var usePolymerase = false
 
 // Run will execute the named function on the wasm bytes with the passed arguments.
 // Returns the result or an error
-func Run(wasm []byte, call string, args []int64) (int64, error) {
+func Run(wasm []byte, resolver exec.ImportResolver, call string, args []int64) (int64, error) {
 	validator, err := wasm_validation.NewValidator()
 	if err != nil {
 		return 0, errors.Wrap(err, "init validator")
@@ -29,7 +26,7 @@ func Run(wasm []byte, call string, args []int64) (int64, error) {
 		return 0, errors.Wrap(err, "validate wasm")
 	}
 
-	vm, err := exec.NewVirtualMachine(wasm, defaultConfig, nil, nil)
+	vm, err := exec.NewVirtualMachine(wasm, defaultConfig, resolver, nil)
 	if err != nil {
 		return 0, errors.Wrap(err, "init vm")
 	}
