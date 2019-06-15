@@ -1,6 +1,7 @@
 package wasm
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -75,11 +76,11 @@ func TestImportFunc(t *testing.T) {
 		t.Fatalf("%+v", err)
 	}
 
-	res, err := Run(simple, imports, "add1", []interface{}{int32(7), int32(9)}, AsInt32)
+	res, err := Run(simple, imports, "add1", []interface{}{int32(7), int32(9)}, AsString)
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
-	if res.(int32) != 17*5 {
+	if res.(string) != strings.Repeat("fool ", 17) {
 		t.Fatalf("Unexpected result: %d", res)
 	}
 }

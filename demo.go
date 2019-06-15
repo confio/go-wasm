@@ -25,6 +25,7 @@ func AsInt64(_ wasm.Instance, res wasm.Value) (interface{}, error) {
 
 func AsString(instance wasm.Instance, res wasm.Value) (interface{}, error) {
 	outputPointer := res.ToI32()
+
 	memory := instance.Memory.Data()[outputPointer:]
 	nth := 0
 	var output strings.Builder
@@ -37,13 +38,13 @@ func AsString(instance wasm.Instance, res wasm.Value) (interface{}, error) {
 		nth++
 	}
 
-	lengthOfOutput := nth
-
 	// Deallocate the subject, and the output.
-	deallocate := instance.Exports["deallocate"]
+	// lengthOfOutput := nth
+	// deallocate := instance.Exports["deallocate"]
+	// deallocate(outputPointer, lengthOfOutput)
+
 	// TODO
 	// deallocate(inputPointer, lengthOfSubject)
-	deallocate(outputPointer, lengthOfOutput)
 
 	return output.String(), nil
 }
