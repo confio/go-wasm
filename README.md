@@ -2,8 +2,10 @@
 
 ### Requirements
 
-`rustup update`
-`rustup target add wasm32-unknown-unknown`
+```
+rustup update
+rustup target add wasm32-unknown-unknown
+```
 
 ### Benches
 
