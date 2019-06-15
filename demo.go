@@ -1,46 +1,38 @@
 package wasm
 
 import (
-	"github.com/pkg/errors"
+	"fmt"
 
-	"github.com/perlin-network/life/exec"
-	wasm_validation "github.com/perlin-network/life/wasm-validation"
+	"github.com/pkg/errors"
+	wasm "github.com/wasmerio/go-ext-wasm/wasmer"
 )
 
-var defaultConfig = exec.VMConfig{
-	DefaultMemoryPages:   128,
-	DefaultTableSize:     65536,
-	DisableFloatingPoint: true,
+// Read loads a wasm file
+func Read(filename string) ([]byte, error) {
+	return wasm.ReadBytes(filename)
 }
 
 // Run will execute the named function on the wasm bytes with the passed arguments.
 // Returns the result or an error
-func Run(wasm []byte, resolver exec.ImportResolver, call string, args []int64) (int64, error) {
-	validator, err := wasm_validation.NewValidator()
-	if err != nil {
-		return 0, errors.Wrap(err, "init validator")
-	}
+func Run(code []byte, call string, args []interface{}) (int32, error) {
 
-	err = validator.ValidateWasm(wasm)
+	// Instantiates the WebAssembly module.
+	instance, err := wasm.NewInstance(code)
 	if err != nil {
-		return 0, errors.Wrap(err, "validate wasm")
+		return 0, errors.Wrap(err, "init wasmer")
 	}
+	defer instance.Close()
 
-	vm, err := exec.NewVirtualMachine(wasm, defaultConfig, resolver, nil)
-	if err != nil {
-		return 0, errors.Wrap(err, "init vm")
-	}
-
-	entryID, ok := vm.GetFunctionExport(call)
+	f, ok := instance.Exports[call]
 	if !ok {
-		return 0, errors.Errorf("Entry function %s not found", call)
+		return 0, errors.Errorf("Function %s not in Exports", call)
 	}
 
-	ret, err := vm.Run(entryID, args...)
+	ret, err := f(args...)
 	if err != nil {
-		vm.PrintStackTrace()
 		return 0, errors.Wrap(err, "Execution failure")
 	}
+	fmt.Printf("%v: %v\n", ret.GetType(), ret)
 
-	return ret, nil
+	return ret.ToI32(), nil
 }
