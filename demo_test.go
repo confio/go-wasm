@@ -22,7 +22,6 @@ func (r *Resolver) ResolveFunc(module, field string) exec.FunctionImport {
 				fmt.Printf("[app] %s\n", string(msg))
 				return 0
 			}
-
 		default:
 			panic(fmt.Errorf("unknown import resolved: %s", field))
 		}
@@ -43,7 +42,9 @@ func TestRun(t *testing.T) {
 		t.Fatalf("%+v", err)
 	}
 
-	res, err := Run(input, callbacks, "fib", []int64{8})
+	data := []byte(`{"number": 10}`)
+
+	res, err := Run(input, callbacks, "fib", []int64{8}, data)
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
@@ -51,11 +52,11 @@ func TestRun(t *testing.T) {
 		t.Fatalf("Unexpected result: %d", res)
 	}
 
-	// res, err = Run(input, callbacks, "app_main", nil)
-	// if err != nil {
-	// 	t.Fatalf("%+v", err)
-	// }
-	// if res != 9227465 { // fib(35)
-	// 	t.Fatalf("Unexpected result: %d", res)
-	// }
+	res, err = Run(input, callbacks, "app_main", nil, data)
+	if err != nil {
+		t.Fatalf("%+v", err)
+	}
+	if res != 9227465 { // fib(35)
+		t.Fatalf("Unexpected result: %d", res)
+	}
 }

@@ -1,6 +1,8 @@
 package wasm
 
 import (
+	"fmt"
+
 	"github.com/pkg/errors"
 
 	"github.com/perlin-network/life/exec"
@@ -15,7 +17,7 @@ var defaultConfig = exec.VMConfig{
 
 // Run will execute the named function on the wasm bytes with the passed arguments.
 // Returns the result or an error
-func Run(wasm []byte, resolver exec.ImportResolver, call string, args []int64) (int64, error) {
+func Run(wasm []byte, resolver exec.ImportResolver, call string, args []int64, data []byte) (int64, error) {
 	validator, err := wasm_validation.NewValidator()
 	if err != nil {
 		return 0, errors.Wrap(err, "init validator")
@@ -31,11 +33,17 @@ func Run(wasm []byte, resolver exec.ImportResolver, call string, args []int64) (
 		return 0, errors.Wrap(err, "init vm")
 	}
 
+	fmt.Printf("mem: %d\n", len(vm.Memory))
+	offset := int64(100000)
+	copy(vm.Memory[offset:], data)
+	fmt.Printf("mem: %X\n", vm.Memory[offset:offset+8])
+
 	entryID, ok := vm.GetFunctionExport(call)
 	if !ok {
 		return 0, errors.Errorf("Entry function %s not found", call)
 	}
 
+	args = append([]int64{offset}, args...)
 	ret, err := vm.Run(entryID, args...)
 	if err != nil {
 		vm.PrintStackTrace()
