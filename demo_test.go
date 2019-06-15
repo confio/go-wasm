@@ -5,7 +5,7 @@ import (
 )
 
 func TestSimple(t *testing.T) {
-	simple, err := Read("examples/simple/simple.wasm")
+	simple, err := Read("examples/simple/build/simple.wasm")
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
