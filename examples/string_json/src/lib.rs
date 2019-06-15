@@ -38,7 +38,7 @@ pub extern "C" fn greet(subject: *mut c_char) -> *mut c_char {
     let mut output = b"Hello, ".to_vec();
 
     for _ in 0..my_dumb_struct.number {
-        output.extend(&my_dumb_struct.message.clone());
+        output.extend(my_dumb_struct.message.bytes());
     }
 
     output.extend(&[b'!']);
