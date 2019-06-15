@@ -63,7 +63,11 @@ func Run(code []byte, imports *wasm.Imports, call string, args []interface{}, pa
 	if err != nil {
 		return nil, errors.Wrap(err, "init wasmer")
 	}
-	defer instance.Close()
+	curInstance = &instance
+	defer func() {
+		instance.Close()
+		curInstance = nil
+	}()
 
 	f, ok := instance.Exports[call]
 	if !ok {

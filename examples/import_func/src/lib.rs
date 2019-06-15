@@ -1,10 +1,10 @@
-use std::ffi::{CString};
+use std::ffi::{CString, CStr};
 use std::mem;
 use std::os::raw::{c_char, c_void};
 
 extern "C" {
     fn sum(x: i32, y: i32) -> i32;
-    fn repeat(pointer: *const u8, length: u32, count: i32, output: *const u8, outLen: u32) -> i32;
+    fn repeat(pointer: *const u8, length: u32, count: i32) -> *mut c_char;
 }
 
 #[no_mangle]
@@ -26,11 +26,11 @@ pub extern "C" fn deallocate(pointer: *mut c_void, capacity: usize) {
 #[no_mangle]
 pub extern "C" fn add1(x: i32, y: i32) -> *mut c_char {
     let msg = "fool ";
-    let mut response = vec![0; 2048];
 
     unsafe { 
         let cnt = sum(x, y) + 1;
-        let _len = repeat(msg.as_ptr(), msg.len() as u32, cnt, response.as_ptr(), response.len() as u32);
-        return CString::from_vec_unchecked(response).into_raw();
+        let ptr = repeat(msg.as_ptr(), msg.len() as u32, cnt);
+        let answer = CStr::from_ptr(ptr).to_bytes().to_vec();
+        return CString::from_vec_unchecked(answer).into_raw();
     }
 }
