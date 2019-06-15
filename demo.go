@@ -34,16 +34,18 @@ func Run(wasm []byte, resolver exec.ImportResolver, call string, args []int64, d
 	}
 
 	fmt.Printf("mem: %d\n", len(vm.Memory))
-	offset := int64(100000)
-	copy(vm.Memory[offset:], data)
-	fmt.Printf("mem: %X\n", vm.Memory[offset:offset+8])
+	if len(data) != 0 {
+		offset := int64(100000)
+		copy(vm.Memory[offset:], data)
+		fmt.Printf("contents: %X\n", vm.Memory[offset:offset+8])
+		args = append([]int64{offset}, args...)
+	}
 
 	entryID, ok := vm.GetFunctionExport(call)
 	if !ok {
 		return 0, errors.Errorf("Entry function %s not found", call)
 	}
 
-	args = append([]int64{offset}, args...)
 	ret, err := vm.Run(entryID, args...)
 	if err != nil {
 		vm.PrintStackTrace()

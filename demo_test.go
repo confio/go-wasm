@@ -42,9 +42,7 @@ func TestRun(t *testing.T) {
 		t.Fatalf("%+v", err)
 	}
 
-	data := []byte(`{"number": 10}`)
-
-	res, err := Run(input, callbacks, "fib", []int64{8}, data)
+	res, err := Run(input, callbacks, "fib", []int64{8}, nil)
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
@@ -52,6 +50,7 @@ func TestRun(t *testing.T) {
 		t.Fatalf("Unexpected result: %d", res)
 	}
 
+	data := []byte(`{"number": 10}`)
 	res, err = Run(input, callbacks, "app_main", nil, data)
 	if err != nil {
 		t.Fatalf("%+v", err)
