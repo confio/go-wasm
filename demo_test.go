@@ -56,7 +56,7 @@ func TestRun(t *testing.T) {
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
-	if res != 9227465 { // fib(35)
-		t.Fatalf("Unexpected result: %d", res)
+	if res != 55 { // fib(10)
+		t.Fatalf("Unexpected result for fib(10): %d", res)
 	}
 }
