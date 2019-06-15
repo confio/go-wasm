@@ -35,7 +35,7 @@ func TestFib(t *testing.T) {
 }
 
 func TestGreet(t *testing.T) {
-	simple, err := Read("examples/greet/greet.wasm")
+	simple, err := Read("examples/greet/build/greet.wasm")
 	if err != nil {
 		t.Fatalf("%+v", err)
 	}
