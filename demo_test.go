@@ -47,5 +47,4 @@ func TestGreet(t *testing.T) {
 	if res.(string) != "Hello, Hello, !" {
 		t.Fatalf("Unexpected result: %d", res)
 	}
-
 }

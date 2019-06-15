@@ -7,26 +7,17 @@ rustup update
 rustup target add wasm32-unknown-unknown
 ```
 
-### Benches
+### Compile example wasm
 
-Clone https://github.com/perlin-network/life
-
-```
-cd bench/cases/fib_recursive
-cargo build --release
-ls -l target/wasm32-unknown-unknown/release/fib_recursive.wasm
+```shell
+cd examples/greet
+sh ./build.sh
+ls -l build
 ```
 
-### Run Benches
+### Run go tests
 
-Go to top level 
-
-```
-export GO111MODULE=on
-go mod vendor
-go build
-./life bench/cases/fib_recursive/target/wasm32-unknown-unknown/release/fib_recursive.wasm
-```
+From top level, call `go test -v .`
 
 ### Cosmos-wasm interface
 
